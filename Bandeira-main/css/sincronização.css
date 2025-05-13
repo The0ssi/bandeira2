@@ -38,7 +38,7 @@
     border-radius: 1rem;
     flex-direction: column; 
     background-color: #f9f5e7;
-    height: 800px;
+    height: 1000px;
     }
     .menu {
     display: flex;                   
@@ -90,6 +90,7 @@
     width: 1.3rem;                     
     margin: 5px 20px;              
     }
+
 .conteudo {
     display: flex;
     flex-direction: column;
