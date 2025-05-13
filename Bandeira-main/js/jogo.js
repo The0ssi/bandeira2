@@ -15,13 +15,6 @@ let botao = document.querySelector('.bnt');
 
 let pontuacao = 0;
 
-document.addEventListener("DOMContentLoaded", function () {
-    var nome = localStorage.getItem("nomeJogador");
-    if (nome) {
-        alert("Bem-vindo ao jogo, " + nome + "!");
-    }
-});
-
 document.addEventListener("DOMContentLoaded", () => {
     iniciarTimer();
 });
@@ -80,7 +73,6 @@ botao.addEventListener("click", () => {
             if (nome) {
                 enviarDadosParaServidor(nome, pontuacao, tempo);
             }
-            alert(`Fim de jogo! Seu tempo foi de ${tempo} segundos e sua pontuação foi ${pontuacao}`);
             window.location.href = "ranking.html";
 
         }
