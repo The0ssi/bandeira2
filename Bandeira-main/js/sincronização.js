@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
             botaoPronto.style.display = 'none';
 
             // Envia um GET para informar que o jogador está pronto
-            fetch('http://127.0.0.1:1880/pronto')
+            fetch('http://10.106.208.42:1880/pronto')
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'ok') {
