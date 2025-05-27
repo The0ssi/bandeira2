@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const list = document.getElementById('playersList');
 
     // Cria a conexão com o WebSocket
-    const ws = new WebSocket("ws://localhost:1880/ws/sala");  // Altere se o Node-RED estiver em outro IP ou porta
+    const ws = new WebSocket("ws://10.106.208.42:1880/ws/sala");  // Altere se o Node-RED estiver em outro IP ou porta
 
     // Quando conectar com sucesso
     ws.onopen = () => {
