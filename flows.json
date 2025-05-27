@@ -1,0 +1,327 @@
+[
+    {
+        "id": "7f5b7cae94b3badc",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5bb52fa0dcbfc5ab",
+        "type": "http in",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "url": "/recebedados",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "2f24e41b876f23ad"
+            ]
+        ]
+    },
+    {
+        "id": "21ae69dab4f135a3",
+        "type": "function",
+        "z": "7f5b7cae94b3badc",
+        "name": "function 1",
+        "func": "let conteudo = msg.payload;\nlet jog = msg.req?.query?.jogador;\nlet pts = parseInt(msg.req?.query?.pontos);\nlet tem = parseInt(msg.req?.query?.tempo);\n\nlet dados = [];\n\ntry {\n    let dadosAntigos = JSON.parse(conteudo);\n    if (Array.isArray(dadosAntigos)) {\n        dados = dadosAntigos;\n    }\n} catch (e) {\n    // Se não conseguir ler o conteúdo, assume lista vazia\n    dados = [];\n}\n\n// Se todos os dados forem válidos, adiciona\nif (jog && !isNaN(pts) && !isNaN(tem)) {\n    dados.push({\n        nome: jog,\n        pontos: pts,\n        tempo: tem\n    });\n}\n\n// Converte para string JSON para salvar no arquivo\nmsg.payload = JSON.stringify(dados, null, 2);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 160,
+        "wires": [
+            [
+                "df5ec6d12e4e03fd"
+            ]
+        ]
+    },
+    {
+        "id": "6426e77101e28053",
+        "type": "http response",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 970,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "f985de38c83f46b4",
+        "type": "debug",
+        "z": "7f5b7cae94b3badc",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "df5ec6d12e4e03fd",
+        "type": "file",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "filename": "dados.json",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 770,
+        "y": 160,
+        "wires": [
+            [
+                "f985de38c83f46b4",
+                "6426e77101e28053"
+            ]
+        ]
+    },
+    {
+        "id": "4006d059a390371f",
+        "type": "http in",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "url": "/retornadados",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 520,
+        "wires": [
+            [
+                "0e0d05ae800cb50a"
+            ]
+        ]
+    },
+    {
+        "id": "0e0d05ae800cb50a",
+        "type": "file in",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "filename": "dados.json",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 350,
+        "y": 520,
+        "wires": [
+            [
+                "52f4a42c97abc3b4"
+            ]
+        ]
+    },
+    {
+        "id": "bf6abff95464a744",
+        "type": "http response",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 970,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2f24e41b876f23ad",
+        "type": "file in",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "filename": "dados.json",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 350,
+        "y": 160,
+        "wires": [
+            [
+                "21ae69dab4f135a3"
+            ]
+        ]
+    },
+    {
+        "id": "52f4a42c97abc3b4",
+        "type": "json",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 550,
+        "y": 520,
+        "wires": [
+            [
+                "3bbd9dbe5e8e3148"
+            ]
+        ]
+    },
+    {
+        "id": "3bbd9dbe5e8e3148",
+        "type": "function",
+        "z": "7f5b7cae94b3badc",
+        "name": "function 2",
+        "func": "let dados = msg.payload;\n\n// Ordenar por pontos (desc) e tempo (asc)\ndados.sort((a, b) => {\n    if (b.pontos !== a.pontos) {\n        return b.pontos - a.pontos; // mais pontos primeiro\n    } else {\n        return a.tempo - b.tempo; // menor tempo primeiro\n    }\n});\n\n// Montar string formatada\nlet resultado = \"\";\nfor (let i = 0; i < dados.length; i++) {\n    let jogador = dados[i];\n    resultado += `${i+1}° ${jogador.nome}: ${jogador.pontos} pontos em ${jogador.tempo}seg\\n`;\n}\n\nmsg.payload = resultado;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 520,
+        "wires": [
+            [
+                "bf6abff95464a744"
+            ]
+        ]
+    },
+    {
+        "id": "bd42dc4a2645077e",
+        "type": "function",
+        "z": "7f5b7cae94b3badc",
+        "name": "function 3",
+        "func": "let dados = [];\n\n// Tenta ler o conteúdo atual do arquivo (msg.payload já é string)\ntry {\n    let jsonString = msg.payload.trim();\n    let jsonObjeto = JSON.parse(jsonString);\n    // Se o arquivo já estiver neste formato (objeto com players e sinal),\n    // pega só os nomes para atualizar a lista\n    if (jsonObjeto && Array.isArray(jsonObjeto.players)) {\n        dados = jsonObjeto.players.map(nome => ({ nome }));\n    } else if (Array.isArray(jsonObjeto)) {\n        dados = jsonObjeto;\n    }\n} catch (e) {\n    dados = [];\n}\n\n// Processa a entrada do websocket\nlet entrada = {};\ntry {\n    entrada = JSON.parse(msg.originalPayload);\n} catch (e) {\n    entrada = {};\n}\n\nconst acao = entrada.acao;\nconst nome = entrada.nome;\n\nif (acao === \"entrar\" && nome && !dados.some(item => item.nome === nome)) {\n    dados.push({ nome });\n} else if (acao === \"sair\") {\n    dados = dados.filter(item => item.nome !== nome);\n}\n\n// Remove nomes indesejados\ndados = dados.filter(item => item.nome !== \"nomeADM123\");\n\n// Monta o objeto para salvar no arquivo\nlet players = dados.map(item => item.nome);\nlet sinal = players.length >= 3;\n\nlet dadosParaSalvar = {\n    players: players,\n    sinal: sinal\n};\n\nmsg.payload = JSON.stringify(dadosParaSalvar, null, 2);\n\n// Também envia o mesmo objeto para o websocket\nreturn [msg, { payload: dadosParaSalvar }];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 340,
+        "wires": [
+            [
+                "86af84ee5688eeed"
+            ]
+        ]
+    },
+    {
+        "id": "e1f42c58017af952",
+        "type": "websocket out",
+        "z": "7f5b7cae94b3badc",
+        "name": "sala",
+        "server": "48d75576cd9ef0b7",
+        "client": "",
+        "x": 1190,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "2e9ed62d9710ca1a",
+        "type": "websocket in",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "server": "48d75576cd9ef0b7",
+        "client": "",
+        "x": 90,
+        "y": 340,
+        "wires": [
+            [
+                "ea88b136541a2e6f"
+            ]
+        ]
+    },
+    {
+        "id": "63880d507a1bb0d3",
+        "type": "file in",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "filename": "sala.json",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 560,
+        "y": 340,
+        "wires": [
+            [
+                "bd42dc4a2645077e"
+            ]
+        ]
+    },
+    {
+        "id": "86af84ee5688eeed",
+        "type": "file",
+        "z": "7f5b7cae94b3badc",
+        "name": "",
+        "filename": "sala.json",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1000,
+        "y": 340,
+        "wires": [
+            [
+                "e1f42c58017af952",
+                "f137c8edf17a5f2a"
+            ]
+        ]
+    },
+    {
+        "id": "ea88b136541a2e6f",
+        "type": "function",
+        "z": "7f5b7cae94b3badc",
+        "name": "function 4",
+        "func": "msg.originalPayload = msg.payload; // guarda os dados do WebSocket\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 340,
+        "wires": [
+            [
+                "63880d507a1bb0d3"
+            ]
+        ]
+    },
+    {
+        "id": "f137c8edf17a5f2a",
+        "type": "debug",
+        "z": "7f5b7cae94b3badc",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "48d75576cd9ef0b7",
+        "type": "websocket-listener",
+        "path": "/ws/sala",
+        "wholemsg": "false"
+    }
+]
