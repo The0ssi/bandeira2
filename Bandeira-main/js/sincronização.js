@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Se o servidor mandar o sinal, redireciona pro jogo
         if (data.sinal) {
-            window.location.replace("../1.Espera-Jogo/jogo.html");
+            window.location.replace("../html/jogo.html");
         }
     };
 
