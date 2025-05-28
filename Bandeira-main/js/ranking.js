@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("ranking");
 
     // Conecta ao WebSocket do Node-RED
-    const ws = new WebSocket("ws://10.106.208.8:1880/ws/ranking");
+    const ws = new WebSocket("ws://10.106.208.42:1880/ws/ranking");
 
     // Quando a conexão for aberta, envia uma mensagem para solicitar os dados
     ws.onopen = function () {
